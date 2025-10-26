@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Subtitle Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #f8f9fc;
+      --success-color: #1cc88a;
+      --danger-color: #e74a3b;
+      --dark-color: #5a5c69;
+    }
+    
+    body {
+      background-color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .video-container {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto 1.5rem;
+      background-color: #000;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .video-subtitles {
+      position: absolute;
+      bottom: 3rem;
+      left: 0.5rem;
+      right: 0.5rem;
+      text-align: center;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      padding: 0.5rem;
+      background: rgba(0,0,0,0.6);
+      transition: all 0.3s ease;
+      border-radius: 0.25rem;
+    }
+    
+    .video-subtitles.urdu {
+      direction: rtl;
+      font-family: 'Noto Nastaliq Urdu', Arial, sans-serif;
+      font-size: 1.4rem;
+      line-height: 1.6;
+      text-align: right;
+      padding: 0.75rem;
+    }
+    
+    .file-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      border: 2px dashed #d1d3e2;
+      border-radius: 0.5rem;
+      background-color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .file-upload-label:hover {
+      border-color: var(--primary-color);
+      background-color: rgba(78, 115, 223, 0.05);
+    }
+    
+    .alert-container {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 1100;
+      min-width: 300px;
+    }
+    
+    .card {
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+      border: 1px solid #e3e6f0;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+      background-color: #3a5ccc;
+      border-color: #3a5ccc;
+    }
+    
+    .navbar {
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    }
+    
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    
+    .status-uploaded {
+      background-color: var(--success-color);
+    }
+    
+    .status-processing {
+      background-color: #f6c23e;
+    }
+    
+    .status-ready {
+      background-color: var(--primary-color);
+    }
+    
+    @media (max-width: 768px) {
+      .video-subtitles {
+        font-size: 1rem;
+        bottom: 2.5rem;
+      }
+      
+      .video-subtitles.urdu {
+        font-size: 1.2rem;
+      }
+      
+      .alert-container {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+        max-width: calc(100% - 2rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="bi bi-subtitles me-2"></i>Subtitle Generator
+      </a>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <div class="alert-container"></div>
+
+    <div class="text-center mb-5">
+      <h1 class="display-5 fw-bold mb-3">Video/Audio Subtitle Generator</h1>
+      <p class="lead text-muted">Supports English, German, and other languages</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <!-- Video Player Section -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="card-title mb-4 text-center">
+              <i class="bi bi-play-circle me-2"></i>Video Player
+              <span id="videoStatus" class="ms-3 fs-6 fw-normal">
+                <span class="status-indicator"></span>
+                <span id="statusText">No video uploaded</span>
+              </span>
+            </h3>
+            
+            <div class="video-container" id="videoContainer" style="display: none;">
+              <video id="videoPlayer" controls width="100%" height="400">
+                Your browser does not support HTML5 video.
+              </video>
+              <div id="videoSubtitles" class="video-subtitles"></div>
+            </div>
+            
+            <div id="placeholderContainer" class="text-center py-5">
+              <i class="bi bi-film display-1 text-muted mb-3"></i>
+              <p class="text-muted">Upload a video to get started</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="card-title mb-4"><i class="bi bi-upload me-2"></i>Upload Media</h3>
+            <form id="uploadForm" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="file" class="form-label fw-bold">Select File</label>
+                <div class="file-upload-wrapper">
+                  <input class="form-control" type="file" id="file" name="file" 
+                         accept=".mp4,.avi,.mov,.mp3,.wav,.ogg,.m4a" required>
+                </div>
+                <div class="form-text">Supported formats: MP4, AVI, MOV, MP3, WAV, OGG, M4A</div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="language" class="form-label fw-bold">Target Language</label>
+                <select class="form-select" id="language" name="language" required>
+                  <option value="en">English</option>
+                  <option value="ur">Urdu (اردو)</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                  <option value="es">Spanish</option>
+                  <option value="pt">Portuguese</option>
+                </select>
+              </div>
+              
+              <div class="progress mb-3" style="height: 8px; display: none;" id="progressContainer">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                     role="progressbar" style="width: 0%"></div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary w-100 py-3 fw-bold" id="submitBtn">
+                <span id="submitText">Generate Subtitles</span>
+                <span id="submitSpinner" class="spinner-border spinner-border-sm ms-2" 
+                      role="status" aria-hidden="true" style="display: none;"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="card mb-4" id="resultsSection" style="display: none;">
+          <div class="card-body">
+            <h3 class="card-title mb-4"><i class="bi bi-download me-2"></i>Download Results</h3>
+            <div class="d-grid gap-3">
+              <a href="#" class="btn btn-success btn-lg py-3" id="downloadVideoBtn">
+                <i class="bi bi-file-earmark-arrow-down me-2"></i> Download Subtitled Video
+              </a>
+              <a href="#" class="btn btn-outline-primary btn-lg py-3" id="downloadSubtitlesBtn">
+                <i class="bi bi-file-text me-2"></i> Download Subtitles Only (.SRT)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-0">© 2023 Subtitle Generator. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadForm = document.getElementById('uploadForm');
+      const fileInput = document.getElementById('file');
+      const videoContainer = document.getElementById('videoContainer');
+      const videoPlayer = document.getElementById('videoPlayer');
+      const placeholderContainer = document.getElementById('placeholderContainer');
+      const subtitleElement = document.getElementById('videoSubtitles');
+      const resultsSection = document.getElementById('resultsSection');
+      const downloadVideoBtn = document.getElementById('downloadVideoBtn');
+      const downloadSubtitlesBtn = document.getElementById('downloadSubtitlesBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      const submitText = document.getElementById('submitText');
+      const submitSpinner = document.getElementById('submitSpinner');
+      const progressBar = document.getElementById('progressBar');
+      const progressContainer = document.getElementById('progressContainer');
+      const alertContainer = document.querySelector('.alert-container');
+      const languageSelect = document.getElementById('language');
+      const statusIndicator = document.querySelector('.status-indicator');
+      const statusText = document.getElementById('statusText');
+      
+      let currentSubtitles = [];
+      let currentJobId = null;
+
+      function showAlert(message, type) {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show`;
+        alert.role = 'alert';
+        alert.innerHTML = `
+          <div class="d-flex align-items-center">
+            <i class="bi ${type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        `;
+        alertContainer.appendChild(alert);
+        
+        setTimeout(() => {
+          bootstrap.Alert.getOrCreateInstance(alert).close();
+        }, 5000);
+      }
+
+      function updateStatus(status, text) {
+        statusIndicator.className = 'status-indicator';
+        statusText.textContent = text;
+        
+        switch(status) {
+          case 'uploaded':
+            statusIndicator.classList.add('status-uploaded');
+            break;
+          case 'processing':
+            statusIndicator.classList.add('status-processing');
+            break;
+          case 'ready':
+            statusIndicator.classList.add('status-ready');
+            break;
+          default:
+            statusIndicator.classList.remove('status-uploaded', 'status-processing', 'status-ready');
+        }
+      }
+
+      function updateSubtitleStyle(lang) {
+        if (lang === 'ur') {
+          subtitleElement.classList.add('urdu');
+        } else {
+          subtitleElement.classList.remove('urdu');
+        }
+      }
+
+      fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (!file) return;
+        
+        if (file.type.includes('video')) {
+          const videoURL = URL.createObjectURL(file);
+          videoPlayer.src = videoURL;
+          videoPlayer.load();
+          videoContainer.style.display = 'block';
+          placeholderContainer.style.display = 'none';
+          subtitleElement.textContent = '';
+          updateStatus('uploaded', 'Video uploaded');
+          showAlert('Video uploaded successfully. Ready to generate subtitles.', 'success');
+        } else {
+          videoContainer.style.display = 'none';
+          placeholderContainer.style.display = 'block';
+          showAlert('Please select a video file', 'warning');
+        }
+      });
+
+      languageSelect.addEventListener('change', function() {
+        updateSubtitleStyle(this.value);
+      });
+
+      uploadForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const file = fileInput.files[0];
+        const language = languageSelect.value;
+        
+        if (!file) {
+          showAlert('Please select a file first', 'danger');
+          return;
+        }
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('language', language);
+        
+        submitText.textContent = 'Processing...';
+        submitSpinner.style.display = 'inline-block';
+        submitBtn.disabled = true;
+        progressContainer.style.display = 'block';
+        updateStatus('processing', 'Generating subtitles...');
+        
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+          progress += 5;
+          progressBar.style.width = `${progress}%`;
+          if (progress >= 95) clearInterval(progressInterval);
+        }, 500);
+        
+        try {
+          const response = await fetch('/generate', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const data = await response.json();
+          
+          if (response.ok && data.success) {
+            progressBar.style.width = '100%';
+            showAlert('Subtitles generated successfully!', 'success');
+            resultsSection.style.display = 'block';
+            updateStatus('ready', 'Subtitles ready');
+            
+            currentSubtitles = data.subtitles || [];
+            currentJobId = data.job_id;
+            
+            downloadVideoBtn.href = `/download/${data.processed_file}`;
+            downloadVideoBtn.download = `subtitled_${file.name}`;
+            
+            downloadSubtitlesBtn.href = `/subtitle/${data.srt_file}`;
+            downloadSubtitlesBtn.download = `subtitles_${data.job_id}.srt`;
+            
+            videoPlayer.ontimeupdate = function() {
+              const currentTime = videoPlayer.currentTime;
+              const currentSubtitle = currentSubtitles.find(sub => 
+                currentTime >= sub.start && currentTime <= sub.end
+              );
+              
+              if (currentSubtitle) {
+                subtitleElement.textContent = currentSubtitle.text;
+              } else if (!currentSubtitles.find(sub => currentTime < sub.end + 1)) {
+                subtitleElement.textContent = '';
+              }
+            };
+            
+          } else {
+            showAlert(data.error || 'An error occurred during processing', 'danger');
+            updateStatus('uploaded', 'Uploaded - Error occurred');
+          }
+        } catch (error) {
+          showAlert('Network error occurred. Please try again.', 'danger');
+          console.error('Error:', error);
+          updateStatus('uploaded', 'Uploaded - Network error');
+        } finally {
+          submitText.textContent = 'Generate Subtitles';
+          submitSpinner.style.display = 'none';
+          submitBtn.disabled = false;
+          clearInterval(progressInterval);
+          setTimeout(() => {
+            progressContainer.style.display = 'none';
+            progressBar.style.width = '0%';
+          }, 1000);
+        }
+      });
+
+      updateSubtitleStyle(languageSelect.value);
+    });
+  </script>
+</body>
+</html>
