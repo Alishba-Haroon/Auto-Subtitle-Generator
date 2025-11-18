@@ -32,24 +32,24 @@ A professional web application that automatically generates subtitles for video 
    cd Auto-Subtitle-Generator
    
 2. Create and activate a virtual environment (recommended):
-
+   ```bash
    python3 -m venv venv
    source venv/bin/activate     # Linux / macOS
    venv\Scripts\activate        # Windows
 
 3. Install dependencies:
-
+     ```bash
    pip install -r requirements.txt
 
 4. Install FFmpeg on your system if not already installed.
 
 5. Run the Flask app:
-
+   ```bash
    flask run
 
 6. Open your browser and navigate to http://localhost:5000.
 
-**⚙️ Usage**
+## ⚙️ Usage
 
 1. Upload a video or audio file via the web interface.
 
@@ -59,11 +59,11 @@ A professional web application that automatically generates subtitles for video 
 
 4. Download the resulting .srt subtitle files or the video with embedded subtitles.
 
-**📸 Screenshots**
+## 📸 Screenshots
 
 
 
-**🛠️ Architecture Overview**
+## 🛠️ Architecture Overview
 
 1. File Upload: Users upload media files through Flask frontend.
 
@@ -77,7 +77,7 @@ A professional web application that automatically generates subtitles for video 
 
 6. Output: Users can download subtitle files or subtitled video.
 
-**🙌 Contributing**
+## 🙌 Contributing
 
 Contributions are welcome! Steps to contribute:
 
@@ -91,11 +91,11 @@ Contributions are welcome! Steps to contribute:
 
 5. Open a Pull Request.
 
-**📄 License**
+## 📄 License
 
 This project is licensed under the MIT License — free to use, modify, and distribute.
 
-**💡 Future Improvements**
+## 💡 Future Improvements
 
 Support more languages and translation models.
 
@@ -107,7 +107,7 @@ Improve UI/UX (progress bars, responsive design).
 
 Add advanced error handling (large files, unsupported formats).
 
-📧 Contact
+## 📧 Contact
 
 GitHub: Alishba‑Haroon
 
