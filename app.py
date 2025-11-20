@@ -10,10 +10,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "dev-secret")
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['PROCESSED_FOLDER'] = 'processed'
-app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB max file size
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  
 
 # Create directories if they don't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -38,57 +38,7 @@ def generate_subtitles(file_path, target_language):
     try:
         # Generate a unique ID for this processing job
         job_id = str(uuid.uuid4())
-        
-        # Mock processing delay
-        import time
-        time.sleep(2)  # Simulate processing time
-        
-        # Mock subtitle data for different languages
-        subtitle_data = {
-            'en': [
-                {'start': 1.0, 'end': 4.0, 'text': 'Welcome to our subtitle generator'},
-                {'start': 5.0, 'end': 8.0, 'text': 'This video demonstrates subtitle functionality'},
-                {'start': 9.0, 'end': 12.0, 'text': 'You can upload your own videos'},
-                {'start': 13.0, 'end': 16.0, 'text': 'And generate subtitles in multiple languages'},
-                {'start': 17.0, 'end': 20.0, 'text': 'Thank you for using our service'}
-            ],
-            'ur': [
-                {'start': 1.0, 'end': 4.0, 'text': 'ہمارے سب ٹائٹل جنریٹر میں خوش آمدید'},
-                {'start': 5.0, 'end': 8.0, 'text': 'یہ ویڈیو سب ٹائٹل کی فعالیت کا مظاہرہ کرتی ہے'},
-                {'start': 9.0, 'end': 12.0, 'text': 'آپ اپنی اپنی ویڈیوز اپ لوڈ کر سکتے ہیں'},
-                {'start': 13.0, 'end': 16.0, 'text': 'اور متعدد زبانوں میں سب ٹائٹل تیار کر سکتے ہیں'},
-                {'start': 17.0, 'end': 20.0, 'text': 'ہماری سروس استعمال کرنے کا شکریہ'}
-            ],
-            'es': [
-                {'start': 1.0, 'end': 4.0, 'text': 'Bienvenido a nuestro generador de subtítulos'},
-                {'start': 5.0, 'end': 8.0, 'text': 'Este video demuestra la funcionalidad de subtítulos'},
-                {'start': 9.0, 'end': 12.0, 'text': 'Puedes subir tus propios videos'},
-                {'start': 13.0, 'end': 16.0, 'text': 'Y generar subtítulos en múltiples idiomas'},
-                {'start': 17.0, 'end': 20.0, 'text': 'Gracias por usar nuestro servicio'}
-            ],
-            'fr': [
-                {'start': 1.0, 'end': 4.0, 'text': 'Bienvenue dans notre générateur de sous-titres'},
-                {'start': 5.0, 'end': 8.0, 'text': 'Cette vidéo démontre la fonctionnalité des sous-titres'},
-                {'start': 9.0, 'end': 12.0, 'text': 'Vous pouvez télécharger vos propres vidéos'},
-                {'start': 13.0, 'end': 16.0, 'text': 'Et générer des sous-titres en plusieurs langues'},
-                {'start': 17.0, 'end': 20.0, 'text': 'Merci d\'utiliser notre service'}
-            ],
-            'de': [
-                {'start': 1.0, 'end': 4.0, 'text': 'Willkommen bei unserem Untertiteligenerator'},
-                {'start': 5.0, 'end': 8.0, 'text': 'Dieses Video demonstriert Untertitefunktionalität'},
-                {'start': 9.0, 'end': 12.0, 'text': 'Sie können Ihre eigenen Videos hochladen'},
-                {'start': 13.0, 'end': 16.0, 'text': 'Und Untertitel in mehreren Sprachen generieren'},
-                {'start': 17.0, 'end': 20.0, 'text': 'Danke, dass Sie unseren Service nutzen'}
-            ],
-            'pt': [
-                {'start': 1.0, 'end': 4.0, 'text': 'Bem-vindo ao nosso gerador de legendas'},
-                {'start': 5.0, 'end': 8.0, 'text': 'Este vídeo demonstra a funcionalidade da legenda'},
-                {'start': 9.0, 'end': 12.0, 'text': 'Você pode fazer upload de seus próprios vídeos'},
-                {'start': 13.0, 'end': 16.0, 'text': 'E gerar legendas em vários idiomas'},
-                {'start': 17.0, 'end': 20.0, 'text': 'Obrigado por usar nosso serviço'}
-            ]
-        }
-        
+    
         # Get subtitles for the target language, default to English if not available
         subtitles = subtitle_data.get(target_language, subtitle_data['en'])
         
@@ -105,8 +55,7 @@ def generate_subtitles(file_path, target_language):
         
         with open(srt_path, 'w', encoding='utf-8') as f:
             f.write(srt_content)
-        
-        # For demo purposes, we'll return the original file as "processed"
+    
         # In a real implementation, you'd burn subtitles into the video
         processed_filename = f"{job_id}_{secure_filename(os.path.basename(file_path))}"
         processed_path = os.path.join(app.config['PROCESSED_FOLDER'], processed_filename)
@@ -123,7 +72,6 @@ def generate_subtitles(file_path, target_language):
             'processed_file': processed_filename,
             'has_video': file_path.lower().endswith(('.mp4', '.avi', '.mov'))
         }
-        
     except Exception as e:
         logger.error(f"Error generating subtitles: {str(e)}")
         return {'success': False, 'error': str(e)}
