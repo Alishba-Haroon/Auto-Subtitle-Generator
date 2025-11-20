@@ -63,6 +63,8 @@ A professional web application that automatically generates subtitles for video 
 
 # Auto Subtitle Generator
 
+# Auto Subtitle Generator
+
 ## Main Interface
 This is the main interface of the Auto Subtitle Generator where you can upload your video/audio files and generate subtitles in multiple languages.
 
@@ -77,6 +79,12 @@ You can upload your video or audio file like this:
 After processing, the tool generates subtitles as shown below:
 
 ![Output Image](static/output.png)
+
+### Download Feature
+Once the subtitles are generated, you can download the video with embedded subtitles or the separate subtitle files:
+
+![Download](static/download.png)
+
 
 
 ## 🛠️ Architecture Overview
