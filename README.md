@@ -61,10 +61,6 @@ A professional web application that automatically generates subtitles for video 
 
 ## 📸 Screenshots
 
-# Auto Subtitle Generator
-
-# Auto Subtitle Generator
-
 ## Main Interface
 This is the main interface of the Auto Subtitle Generator where you can upload your video/audio files and generate subtitles in multiple languages.
 
@@ -107,11 +103,17 @@ Contributions are welcome! Steps to contribute:
 
 1. Fork the repository.
 
-2. Create a new branch: git checkout -b feature/my-feature
+2. Create a new branch:
+    ```bash
+   git checkout -b feature/my-feature
 
-3. Commit changes: git commit -m "Add feature"
+3. Commit changes:
+    ```bash
+    git commit -m "Add feature"
 
-4. Push the branch: git push origin feature/my-feature
+4. Push the branch:
+   ```bash
+   git push origin feature/my-feature
 
 5. Open a Pull Request.
 
@@ -134,5 +136,15 @@ Add advanced error handling (large files, unsupported formats).
 ## 📧 Contact
 
 GitHub: Alishba‑Haroon
+
+# Auto Subtitle Generator
+
+[![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Flask](https://img.shields.io/badge/Flask-2.3-orange?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![GitHub Repo Size](https://img.shields.io/github/repo-size/Alishba-Haroon/Auto-Subtitle-Generator?color=informational)](https://github.com/Alishba-Haroon/Auto-Subtitle-Generator)
+
+A professional web application that automatically generates subtitles for video and audio files using **Whisper** for transcription, **Hugging Face Transformers** for translation, and **FFmpeg** for subtitle embedding.
+
 
 
