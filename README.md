@@ -139,7 +139,7 @@ GitHub: Alishba‑Haroon
 
 # Auto Subtitle Generator
 
-[![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Flask](https://img.shields.io/badge/Flask-2.3-orange?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![GitHub Repo Size](https://img.shields.io/github/repo-size/Alishba-Haroon/Auto-Subtitle-Generator?color=informational)](https://github.com/Alishba-Haroon/Auto-Subtitle-Generator)
