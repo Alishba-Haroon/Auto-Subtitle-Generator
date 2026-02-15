@@ -4,7 +4,7 @@ A professional web application that automatically generates subtitles for video 
 
 ---
 
-## 🚀 Features
+##  Features
 
 - **Automatic Transcription**: Convert spoken words from video/audio into text using Whisper.  
 - **Multilingual Subtitles**: Generate subtitles in multiple languages using Hugging Face Transformers.  
@@ -14,7 +14,7 @@ A professional web application that automatically generates subtitles for video 
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 
 - **Backend**: Python, Flask  
 - **Speech-to-Text**: Whisper  
@@ -24,7 +24,7 @@ A professional web application that automatically generates subtitles for video 
 
 ---
 
-## 📦 Installation
+##  Installation
 
 1. Clone the repository:  
    ```bash
@@ -49,7 +49,7 @@ A professional web application that automatically generates subtitles for video 
 
 6. Open your browser and navigate to http://localhost:5000.
 
-## ⚙️ Usage
+## Usage
 
 1. Upload a video or audio file via the web interface.
 
@@ -59,7 +59,7 @@ A professional web application that automatically generates subtitles for video 
 
 4. Download the resulting .srt subtitle files or the video with embedded subtitles.
 
-## 📸 Screenshots
+##  Screenshots
 
 ## Main Interface
 This is the main interface of the Auto Subtitle Generator where you can upload your video/audio files and generate subtitles in multiple languages.
@@ -83,7 +83,7 @@ Once the subtitles are generated, you can download the video with embedded subti
 
 
 
-## 🛠️ Architecture Overview
+## Architecture Overview
 
 1. File Upload: Users upload media files through Flask frontend.
 
@@ -97,7 +97,7 @@ Once the subtitles are generated, you can download the video with embedded subti
 
 6. Output: Users can download subtitle files or subtitled video.
 
-## 🙌 Contributing
+##  Contributing
 
 Contributions are welcome! Steps to contribute:
 
@@ -117,11 +117,11 @@ Contributions are welcome! Steps to contribute:
 
 5. Open a Pull Request.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License — free to use, modify, and distribute.
 
-## 💡 Future Improvements
+##  Future Improvements
 
 Support more languages and translation models.
 
@@ -133,7 +133,7 @@ Improve UI/UX (progress bars, responsive design).
 
 Add advanced error handling (large files, unsupported formats).
 
-## 📧 Contact
+##  Contact
 
 GitHub: Alishba‑Haroon
 
