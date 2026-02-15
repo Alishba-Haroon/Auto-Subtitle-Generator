@@ -123,15 +123,15 @@ This project is licensed under the MIT License — free to use, modify, and dist
 
 ##  Future Improvements
 
-Support more languages and translation models.
+* Support more languages and translation models.
 
-Batch processing for multiple videos.
+* Batch processing for multiple videos.
 
-Add alternative subtitle formats (e.g., VTT).
+* Add alternative subtitle formats (e.g., VTT).
 
-Improve UI/UX (progress bars, responsive design).
+* Improve UI/UX (progress bars, responsive design).
 
-Add advanced error handling (large files, unsupported formats).
+* Add advanced error handling (large files, unsupported formats).
 
 ##  Contact
 
